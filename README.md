@@ -1,6 +1,6 @@
 # Tab Organizer Chrome Extension
 
-A minimal, modern, and eye-friendly Chrome extension to help you organize your tabs efficiently. Features a trendy dark mode UI and powerful tab management tools.
+A minimal, modern, and eye-friendly Chrome extension to help you organize your tabs efficiently. Features a sleek dark mode UI with a contemporary flat design and powerful tab management tools.
 
 ## Features
 
@@ -11,13 +11,14 @@ A minimal, modern, and eye-friendly Chrome extension to help you organize your t
 - **Ungroup All Tabs**: Remove all tabs from any tab groups in the current window.
 - **Close Duplicate Tabs**: Close all duplicate tabs (same base URL) in the browser.
 - **Tab Count Display**: Shows the number of open tabs and tab groups in the popup.
-- **Grouped Features**: Popup UI groups features under Audio, Grouping, and Cleanup for clarity.
-- **Always-on Dark Mode**: Trendy, eye-friendly dark UI with electric blue, neon green, and slate gray accents.
+- **Always-on Dark Mode**: Modern, eye-friendly dark UI with a clean, minimalist design.
 
 ## UI/UX
-- Modern, minimal, and trendy dark mode (no toggle, always on).
-- Features grouped for quick access: Audio (mute/unmute), Grouping (domain/type/ungroup), Cleanup (close duplicates).
-- Clean, accessible layout with accent colors for each feature group.
+- Contemporary flat design with consistent button styling
+- Modern dark mode interface with subtle purple accent colors
+- Improved spacing and visual hierarchy for better readability
+- Subtle animations and transitions for interactive elements
+- Clean, minimalist layout that focuses on functionality
 
 ## Installation
 1. Download or clone this repository.
@@ -28,9 +29,13 @@ A minimal, modern, and eye-friendly Chrome extension to help you organize your t
 
 ## Usage
 - Click the Tab Organizer icon to open the popup.
-- Use the buttons to mute/unmute, group, ungroup, or close duplicate tabs.
+- Use the clearly labeled buttons to manage your tabs.
 - View the current tab and group count at the top.
-- Enjoy a sleek, modern dark UI that reduces eye strain.
+- Experience smooth interactions with subtle animations.
+- Enjoy a sleek, modern dark UI that reduces eye strain and enhances focus.
+
+## Recent Updates
+- **UI Redesign (May 2025)**: Completely revamped the user interface with a modern flat design, consistent button styling, improved spacing, and subtle animations for a more polished user experience.
 
 ## License
 Tedz
