@@ -12,7 +12,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const searchResultsContainer = document.getElementById('search-results');
   const notificationElement = document.getElementById('notification');
   const notificationMessage = document.querySelector('.notification-message');
-  const autoGroupingToggle = document.getElementById('auto-grouping-toggle');
+  const toggleAutoGroupingBtn = document.getElementById('toggle-auto-grouping');
+  const toggleStatusEl = document.getElementById('toggle-status');
   const body = document.body;
 
   // Notification system
@@ -261,61 +262,60 @@ document.addEventListener('DOMContentLoaded', () => {
   // Hide clear button initially
   clearSearchButton.style.display = 'none';
 
-  // Auto-grouping toggle functionality
-  function updateAutoGroupingUI(isEnabled) {
-    // Update the UI to match the current state
-    autoGroupingToggle.checked = isEnabled;
-    console.log('Updated toggle UI to:', isEnabled);
+  // Simple direct toggle functionality
+  let autoGroupingEnabled = true; // Default state
+
+  // Update UI to reflect current state
+  function updateToggleUI(enabled) {
+    if (enabled) {
+      toggleStatusEl.textContent = 'ON';
+      toggleStatusEl.classList.remove('off');
+    } else {
+      toggleStatusEl.textContent = 'OFF';
+      toggleStatusEl.classList.add('off');
+    }
   }
 
-  function saveAutoGroupingSetting(isEnabled) {
-    console.log('Saving auto-grouping setting:', isEnabled);
+  // Toggle the auto-grouping state
+  function toggleAutoGrouping() {
+    // Toggle the state
+    autoGroupingEnabled = !autoGroupingEnabled;
 
-    // Save the setting to Chrome storage
-    chrome.storage.sync.set({ autoGroupingEnabled: isEnabled }, () => {
-      if (chrome.runtime.lastError) {
-        console.error('Error saving setting:', chrome.runtime.lastError);
-      } else {
-        console.log('Setting saved successfully');
+    // Update UI
+    updateToggleUI(autoGroupingEnabled);
 
-        // Show notification
-        showNotification(
-          isEnabled ? 'Auto-grouping enabled' : 'Auto-grouping disabled',
-          'info',
-          2000
-        );
-      }
+    // Save to storage
+    chrome.storage.sync.set({ autoGroupingEnabled: autoGroupingEnabled }, () => {
+      console.log('Auto-grouping set to:', autoGroupingEnabled);
+
+      // Show notification
+      showNotification(
+        autoGroupingEnabled ? 'Auto-grouping enabled' : 'Auto-grouping disabled',
+        'info',
+        2000
+      );
     });
   }
 
-  // Initialize the toggle state
-  function initializeAutoGrouping() {
-    chrome.storage.sync.get(['autoGroupingEnabled'], (result) => {
-      console.log('Loading auto-grouping setting:', result);
+  // Load the current setting
+  chrome.storage.sync.get(['autoGroupingEnabled'], (result) => {
+    if (result.hasOwnProperty('autoGroupingEnabled')) {
+      // Convert to boolean
+      autoGroupingEnabled = result.autoGroupingEnabled === true;
+      console.log('Loaded auto-grouping setting:', autoGroupingEnabled);
+    } else {
+      // Default to true if not set
+      autoGroupingEnabled = true;
+      chrome.storage.sync.set({ autoGroupingEnabled: true });
+      console.log('Initialized auto-grouping to true');
+    }
 
-      if (result.hasOwnProperty('autoGroupingEnabled')) {
-        const isEnabled = result.autoGroupingEnabled === true;
-        updateAutoGroupingUI(isEnabled);
-      } else {
-        // Default to true if not set
-        saveAutoGroupingSetting(true);
-        updateAutoGroupingUI(true);
-      }
-    });
-  }
-
-  // Initialize on popup open
-  initializeAutoGrouping();
-
-  // Handle toggle click
-  autoGroupingToggle.addEventListener('click', () => {
-    // Get the new state directly from the checkbox
-    const newState = autoGroupingToggle.checked;
-    console.log('Toggle clicked, new state:', newState);
-
-    // Save the new setting
-    saveAutoGroupingSetting(newState);
+    // Update UI to match loaded state
+    updateToggleUI(autoGroupingEnabled);
   });
+
+  // Add click handler to toggle button
+  toggleAutoGroupingBtn.addEventListener('click', toggleAutoGrouping);
 
   // Update search results when tabs change
   chrome.tabs.onUpdated.addListener((_, changeInfo) => {
