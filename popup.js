@@ -2,7 +2,6 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   const closeDuplicatesButton = document.getElementById('close-duplicates');
-  const darkModeToggle = document.getElementById('dark-mode-toggle');
   const ungroupTabsButton = document.getElementById('ungroup-tabs');
   const muteTabsButton = document.getElementById('mute-tabs');
   const unmuteTabsButton = document.getElementById('unmute-tabs');
@@ -10,24 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const groupByTypeButton = document.getElementById('group-by-keyword'); // Reuse the button for type grouping
   const body = document.body;
 
-  // Load dark mode preference from storage
-  chrome.storage.sync.get('darkMode', (data) => {
-    if (data.darkMode) {
-      body.classList.add('dark-mode');
-      darkModeToggle.checked = true;
-    }
-  });
-
-  // Toggle dark mode and save preference
-  darkModeToggle.addEventListener('change', () => {
-    if (darkModeToggle.checked) {
-      body.classList.add('dark-mode');
-      chrome.storage.sync.set({ darkMode: true });
-    } else {
-      body.classList.remove('dark-mode');
-      chrome.storage.sync.set({ darkMode: false });
-    }
-  });
+  // Always enable dark mode
+  body.classList.add('dark-mode');
 
   // Close Duplicate Tabs
   closeDuplicatesButton.addEventListener('click', () => {

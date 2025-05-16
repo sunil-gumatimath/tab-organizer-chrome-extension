@@ -4,24 +4,20 @@
   <title>Tab Organizer</title>
   <link rel="stylesheet" href="popup.css">
 </head>
-<body>
+<body class="dark-mode">
   <h1>Tab Organizer</h1>
 
   <div id="features-section">
-    <button id="close-duplicates">Close Duplicate Tabs</button>
-    <button id="ungroup-tabs">Ungroup All Tabs</button>
     <button id="mute-tabs">Mute All Tabs</button>
     <button id="unmute-tabs">Unmute All Tabs</button>
     <button id="group-by-domain">Group Tabs by Domain</button>
     <button id="group-by-keyword">Group Tabs by Names</button>
+    <button id="ungroup-tabs">Ungroup All Tabs</button>
+    <button id="close-duplicates">Close Duplicate Tabs</button>
   </div>
 
   <div class="settings-section">
-    <span>Dark Mode</span>
-    <label class="switch">
-      <input type="checkbox" id="dark-mode-toggle">
-      <span class="slider round"></span>
-    </label>
+    <!-- Removed Dark Mode toggle -->
   </div>
 
   <script src="popup.js"></script>
