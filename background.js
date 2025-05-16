@@ -21,8 +21,12 @@ chrome.storage.sync.get(['autoGroupingEnabled'], (result) => {
 // Listen for changes to settings
 chrome.storage.onChanged.addListener((changes) => {
   if (changes.autoGroupingEnabled) {
-    isAutoGroupingEnabled = changes.autoGroupingEnabled.newValue;
-    console.log('Auto-grouping setting changed to:', isAutoGroupingEnabled);
+    // Make sure we're dealing with a boolean value
+    isAutoGroupingEnabled = changes.autoGroupingEnabled.newValue === true;
+    console.log('Auto-grouping setting changed to:', isAutoGroupingEnabled,
+                'Type:', typeof isAutoGroupingEnabled,
+                'Original value:', changes.autoGroupingEnabled.newValue,
+                'Original type:', typeof changes.autoGroupingEnabled.newValue);
   }
 });
 
