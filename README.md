@@ -10,7 +10,14 @@ A minimal, modern, and eye-friendly Chrome extension to help you organize your t
 - **Group Tabs by Names**: Group tabs by type (e.g., Social, Work, Shopping, News, Video, Mail, Docs) using smart URL and domain matching.
 - **Ungroup All Tabs**: Remove all tabs from any tab groups in the current window.
 - **Close Duplicate Tabs**: Close all duplicate tabs (same base URL) in the browser.
+- **Tab Count Display**: Shows the number of open tabs and tab groups in the popup.
+- **Grouped Features**: Popup UI groups features under Audio, Grouping, and Cleanup for clarity.
 - **Always-on Dark Mode**: Trendy, eye-friendly dark UI with electric blue, neon green, and slate gray accents.
+
+## UI/UX
+- Modern, minimal, and trendy dark mode (no toggle, always on).
+- Features grouped for quick access: Audio (mute/unmute), Grouping (domain/type/ungroup), Cleanup (close duplicates).
+- Clean, accessible layout with accent colors for each feature group.
 
 ## Installation
 1. Download or clone this repository.
@@ -22,6 +29,7 @@ A minimal, modern, and eye-friendly Chrome extension to help you organize your t
 ## Usage
 - Click the Tab Organizer icon to open the popup.
 - Use the buttons to mute/unmute, group, ungroup, or close duplicate tabs.
+- View the current tab and group count at the top.
 - Enjoy a sleek, modern dark UI that reduces eye strain.
 
 ## License
