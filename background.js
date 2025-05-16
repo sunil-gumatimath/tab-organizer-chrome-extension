@@ -11,7 +11,6 @@ function loadSettings() {
   chrome.storage.sync.get(['autoGroupingEnabled'], (result) => {
     // Use strict boolean comparison
     isAutoGroupingEnabled = result.autoGroupingEnabled === true;
-    console.log('[Background] Auto-grouping is:', isAutoGroupingEnabled);
   });
 }
 
@@ -23,7 +22,6 @@ chrome.storage.onChanged.addListener((changes) => {
   if (changes.autoGroupingEnabled) {
     // Use strict boolean comparison
     isAutoGroupingEnabled = changes.autoGroupingEnabled.newValue === true;
-    console.log('[Background] Auto-grouping changed to:', isAutoGroupingEnabled);
   }
 });
 
@@ -107,7 +105,6 @@ chrome.tabs.onCreated.addListener((tab) => {
       tab.url.startsWith('chrome-extension://') ||
       tab.url === 'about:blank') return;
 
-  console.log('[Background] Processing new tab:', tab.id);
   autoGroupTab(tab);
 });
 
@@ -123,7 +120,6 @@ chrome.tabs.onUpdated.addListener((_, changeInfo, tab) => {
         tab.url.startsWith('chrome-extension://') ||
         tab.url === 'about:blank') return;
 
-    console.log('[Background] Processing updated tab:', tab.id);
     autoGroupTab(tab);
   }
 });

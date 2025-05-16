@@ -286,8 +286,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Save to storage
     chrome.storage.sync.set({ autoGroupingEnabled: autoGroupingEnabled }, () => {
-      console.log('Auto-grouping set to:', autoGroupingEnabled);
-
       // Show notification
       showNotification(
         autoGroupingEnabled ? 'Auto-grouping enabled' : 'Auto-grouping disabled',
@@ -302,12 +300,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (result.hasOwnProperty('autoGroupingEnabled')) {
       // Convert to boolean
       autoGroupingEnabled = result.autoGroupingEnabled === true;
-      console.log('Loaded auto-grouping setting:', autoGroupingEnabled);
     } else {
       // Default to true if not set
       autoGroupingEnabled = true;
       chrome.storage.sync.set({ autoGroupingEnabled: true });
-      console.log('Initialized auto-grouping to true');
     }
 
     // Update UI to match loaded state
@@ -554,7 +550,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             chrome.tabs.group({ tabIds: tabIds }, (groupId) => {
               if (chrome.runtime.lastError) {
-                console.error('Error grouping tabs by domain:', chrome.runtime.lastError.message);
                 hasError = true;
               } else {
                 chrome.tabGroups.update(groupId, {
@@ -562,7 +557,6 @@ document.addEventListener('DOMContentLoaded', () => {
                   color: color
                 }, () => {
                   if (chrome.runtime.lastError) {
-                    console.error('Error naming group:', chrome.runtime.lastError.message);
                     hasError = true;
                   } else {
                     totalGroups++;
@@ -691,7 +685,6 @@ document.addEventListener('DOMContentLoaded', () => {
         typesToGroup.forEach(([type, data]) => {
           chrome.tabs.group({ tabIds: data.tabIds }, (groupId) => {
             if (chrome.runtime.lastError) {
-              console.error('Error grouping tabs by type:', chrome.runtime.lastError.message);
               hasError = true;
 
               // Count as processed even if there was an error
@@ -703,7 +696,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 color: data.color
               }, () => {
                 if (chrome.runtime.lastError) {
-                  console.error('Error naming group:', chrome.runtime.lastError.message);
                   hasError = true;
                 } else {
                   totalGroups++;
