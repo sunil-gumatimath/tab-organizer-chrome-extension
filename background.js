@@ -2,31 +2,42 @@
 
 // Store active group information
 let domainGroups = {};
-let isAutoGroupingEnabled = true;
+let isAutoGroupingEnabled = true; // Default state
 const groupColors = ['blue', 'red', 'yellow', 'green', 'pink', 'purple', 'cyan', 'orange', 'grey', 'teal'];
 let colorIndex = 0;
 
+/**
+ * Load the auto-grouping setting from storage
+ */
+function loadAutoGroupingSetting() {
+  chrome.storage.sync.get(['autoGroupingEnabled'], (result) => {
+    if (result.hasOwnProperty('autoGroupingEnabled')) {
+      // Explicitly convert to boolean to avoid type issues
+      isAutoGroupingEnabled = result.autoGroupingEnabled === true;
+      console.log('[Background] Auto-grouping setting loaded:', isAutoGroupingEnabled,
+                  'Type:', typeof isAutoGroupingEnabled);
+    } else {
+      // Initialize setting if it doesn't exist
+      isAutoGroupingEnabled = true;
+      chrome.storage.sync.set({ autoGroupingEnabled: true });
+      console.log('[Background] Auto-grouping setting initialized to true');
+    }
+  });
+}
+
 // Load settings when extension starts
-chrome.storage.sync.get(['autoGroupingEnabled'], (result) => {
-  if (result.hasOwnProperty('autoGroupingEnabled')) {
-    isAutoGroupingEnabled = result.autoGroupingEnabled;
-    console.log('Auto-grouping setting loaded:', isAutoGroupingEnabled);
-  } else {
-    // Default to enabled if not set
-    chrome.storage.sync.set({ autoGroupingEnabled: true });
-    console.log('Auto-grouping setting initialized to true');
-  }
-});
+loadAutoGroupingSetting();
 
 // Listen for changes to settings
 chrome.storage.onChanged.addListener((changes) => {
   if (changes.autoGroupingEnabled) {
-    // Make sure we're dealing with a boolean value
+    const oldValue = isAutoGroupingEnabled;
+    // Explicitly convert to boolean
     isAutoGroupingEnabled = changes.autoGroupingEnabled.newValue === true;
-    console.log('Auto-grouping setting changed to:', isAutoGroupingEnabled,
-                'Type:', typeof isAutoGroupingEnabled,
-                'Original value:', changes.autoGroupingEnabled.newValue,
-                'Original type:', typeof changes.autoGroupingEnabled.newValue);
+
+    console.log('[Background] Auto-grouping setting changed from', oldValue, 'to', isAutoGroupingEnabled);
+    console.log('[Background] Raw value:', changes.autoGroupingEnabled.newValue,
+                'Type:', typeof changes.autoGroupingEnabled.newValue);
   }
 });
 
@@ -99,24 +110,37 @@ function extractDomain(url) {
 
 // Handle tab creation
 chrome.tabs.onCreated.addListener((tab) => {
-  if (!isAutoGroupingEnabled) return;
+  console.log('[Background] Tab created, auto-grouping enabled:', isAutoGroupingEnabled);
 
-  // Skip tabs that don't have a URL yet
-  if (!tab.url || tab.url === '') {
-    // For tabs without URLs, we'll wait for them to get a URL
+  // Check if auto-grouping is enabled
+  if (isAutoGroupingEnabled !== true) {
+    console.log('[Background] Auto-grouping is disabled, skipping tab creation handling');
     return;
   }
 
+  // Skip tabs that don't have a URL yet
+  if (!tab.url || tab.url === '') {
+    console.log('[Background] Tab has no URL yet, waiting for URL update');
+    return;
+  }
+
+  console.log('[Background] Processing new tab for auto-grouping:', tab.id, tab.url);
   autoGroupTab(tab);
 });
 
 // Handle tab updates (for when tabs change URLs)
 chrome.tabs.onUpdated.addListener((_, changeInfo, tab) => {
-  if (!isAutoGroupingEnabled) return;
-
-  // Process if the tab is complete and has a URL
-  // This catches both new tabs and URL changes
+  // Only process if the tab is complete and has a URL
   if (changeInfo.status === 'complete' && tab.url) {
+    console.log('[Background] Tab updated, auto-grouping enabled:', isAutoGroupingEnabled);
+
+    // Check if auto-grouping is enabled
+    if (isAutoGroupingEnabled !== true) {
+      console.log('[Background] Auto-grouping is disabled, skipping tab update handling');
+      return;
+    }
+
+    console.log('[Background] Processing updated tab for auto-grouping:', tab.id, tab.url);
     autoGroupTab(tab);
   }
 });

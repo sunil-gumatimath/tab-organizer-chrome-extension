@@ -262,49 +262,59 @@ document.addEventListener('DOMContentLoaded', () => {
   clearSearchButton.style.display = 'none';
 
   // Auto-grouping toggle functionality
-  // Load saved setting
-  chrome.storage.sync.get(['autoGroupingEnabled'], (result) => {
-    console.log('Loading auto-grouping setting:', result);
-    if (result.hasOwnProperty('autoGroupingEnabled')) {
-      autoGroupingToggle.checked = result.autoGroupingEnabled;
-      console.log('Set toggle to:', autoGroupingToggle.checked);
-    } else {
-      // Default to true if not set
-      chrome.storage.sync.set({ autoGroupingEnabled: true });
-      console.log('Initialized auto-grouping to true');
-    }
-  });
+  function updateAutoGroupingUI(isEnabled) {
+    // Update the UI to match the current state
+    autoGroupingToggle.checked = isEnabled;
+    console.log('Updated toggle UI to:', isEnabled);
+  }
 
-  // Save setting when changed
-  autoGroupingToggle.addEventListener('click', () => {
-    // Use the current state of the checkbox
-    const isEnabled = autoGroupingToggle.checked;
-    console.log('Toggle clicked, new state:', isEnabled);
+  function saveAutoGroupingSetting(isEnabled) {
+    console.log('Saving auto-grouping setting:', isEnabled);
 
-    // Force a boolean value to avoid any type issues
-    const boolValue = isEnabled === true;
-    console.log('Saving value:', boolValue);
-
-    // Save the setting
-    chrome.storage.sync.set({ autoGroupingEnabled: boolValue }, () => {
+    // Save the setting to Chrome storage
+    chrome.storage.sync.set({ autoGroupingEnabled: isEnabled }, () => {
       if (chrome.runtime.lastError) {
         console.error('Error saving setting:', chrome.runtime.lastError);
       } else {
         console.log('Setting saved successfully');
 
-        // Verify the setting was saved correctly
-        chrome.storage.sync.get(['autoGroupingEnabled'], (result) => {
-          console.log('Verification - saved value:', result.autoGroupingEnabled);
-        });
+        // Show notification
+        showNotification(
+          isEnabled ? 'Auto-grouping enabled' : 'Auto-grouping disabled',
+          'info',
+          2000
+        );
       }
     });
+  }
 
-    // Show notification
-    showNotification(
-      isEnabled ? 'Auto-grouping enabled' : 'Auto-grouping disabled',
-      'info',
-      2000
-    );
+  // Initialize the toggle state
+  function initializeAutoGrouping() {
+    chrome.storage.sync.get(['autoGroupingEnabled'], (result) => {
+      console.log('Loading auto-grouping setting:', result);
+
+      if (result.hasOwnProperty('autoGroupingEnabled')) {
+        const isEnabled = result.autoGroupingEnabled === true;
+        updateAutoGroupingUI(isEnabled);
+      } else {
+        // Default to true if not set
+        saveAutoGroupingSetting(true);
+        updateAutoGroupingUI(true);
+      }
+    });
+  }
+
+  // Initialize on popup open
+  initializeAutoGrouping();
+
+  // Handle toggle click
+  autoGroupingToggle.addEventListener('click', () => {
+    // Get the new state directly from the checkbox
+    const newState = autoGroupingToggle.checked;
+    console.log('Toggle clicked, new state:', newState);
+
+    // Save the new setting
+    saveAutoGroupingSetting(newState);
   });
 
   // Update search results when tabs change
