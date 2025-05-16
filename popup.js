@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const searchResultsContainer = document.getElementById('search-results');
   const notificationElement = document.getElementById('notification');
   const notificationMessage = document.querySelector('.notification-message');
+  const autoGroupingToggle = document.getElementById('auto-grouping-toggle');
   const body = document.body;
 
   // Notification system
@@ -259,6 +260,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Hide clear button initially
   clearSearchButton.style.display = 'none';
+
+  // Auto-grouping toggle functionality
+  // Load saved setting
+  chrome.storage.sync.get(['autoGroupingEnabled'], (result) => {
+    if (result.hasOwnProperty('autoGroupingEnabled')) {
+      autoGroupingToggle.checked = result.autoGroupingEnabled;
+    }
+  });
+
+  // Save setting when changed
+  autoGroupingToggle.addEventListener('change', () => {
+    const isEnabled = autoGroupingToggle.checked;
+    chrome.storage.sync.set({ autoGroupingEnabled: isEnabled });
+
+    // Show notification
+    showNotification(
+      isEnabled ? 'Auto-grouping enabled' : 'Auto-grouping disabled',
+      'info',
+      2000
+    );
+  });
 
   // Update search results when tabs change
   chrome.tabs.onUpdated.addListener((_, changeInfo) => {

@@ -4,10 +4,11 @@ A minimal, modern, and eye-friendly Chrome extension to help you organize your t
 
 ## Features
 
+- **Auto Tab Grouping**: Automatically groups new tabs by domain as you browse, keeping your tabs organized without manual intervention.
 - **Tab Search and Filter**: Quickly find tabs by searching for text in titles or URLs, with real-time filtering and highlighted matches.
 - **Mute All Tabs**: Mute all tabs in the current window.
 - **Unmute All Tabs**: Unmute all tabs in the current window.
-- **Group Tabs by Domain**: Automatically group tabs by their domain (e.g., all Gmail tabs together).
+- **Group Tabs by Domain**: Manually group tabs by their domain (e.g., all Gmail tabs together).
 - **Group Tabs by Names**: Group tabs by type (e.g., Social, Work, Shopping, News, Video, Mail, Docs) using smart URL and domain matching.
 - **Ungroup All Tabs**: Remove all tabs from any tab groups in the current window.
 - **Close Duplicate Tabs**: Close all duplicate tabs (same base URL) in the browser.
@@ -30,19 +31,26 @@ A minimal, modern, and eye-friendly Chrome extension to help you organize your t
 
 ## Usage
 - Click the Tab Organizer icon to open the popup.
-- Use the search bar at the top to quickly find and switch to specific tabs.
-- Type any text to filter tabs by title or URL - results update in real-time.
-- Use keyboard shortcuts for faster navigation:
-  - Press `Enter` to switch to the first search result
-  - Use `↑` and `↓` arrow keys to navigate through search results
-  - Press `Esc` to clear the search
-- Click on a search result to switch to that tab.
-- Use the clearly labeled buttons to manage your tabs.
-- View the current tab and group count at the top.
-- Experience smooth interactions with subtle animations.
-- Enjoy a sleek, modern dark UI that reduces eye strain and enhances focus.
+- **Auto Tab Grouping**:
+  - New tabs are automatically grouped by domain as you browse
+  - Toggle the auto-grouping feature on/off using the switch at the bottom of the popup
+  - Groups are color-coded and named by domain for easy identification
+- **Tab Search**:
+  - Use the search bar at the top to quickly find and switch to specific tabs
+  - Type any text to filter tabs by title or URL - results update in real-time
+  - Use keyboard shortcuts for faster navigation:
+    - Press `Enter` to switch to the first search result
+    - Use `↑` and `↓` arrow keys to navigate through search results
+    - Press `Esc` to clear the search
+  - Click on a search result to switch to that tab
+- **Tab Management**:
+  - Use the clearly labeled buttons to manage your tabs
+  - View the current tab and group count at the top
+  - Experience smooth interactions with subtle animations
+  - Enjoy a sleek, modern dark UI that reduces eye strain and enhances focus
 
 ## Recent Updates
+- **Auto Tab Grouping (May 2025)**: Added automatic tab grouping by domain as you browse, with the ability to toggle the feature on/off.
 - **Enhanced Tab Search (May 2025)**: Improved tab search with keyboard navigation, URL display, and better visual feedback.
 - **UI Enhancements (May 2025)**: Added loading indicators, success/error notifications, and improved visual feedback for all actions.
 - **Improved Tab Grouping (May 2025)**: Enhanced domain detection and added more website categories for better tab organization.
