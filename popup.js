@@ -12,6 +12,25 @@ document.addEventListener('DOMContentLoaded', () => {
   // Always enable dark mode
   body.classList.add('dark-mode');
 
+  // Tab Count Display
+  function updateTabCount() {
+    chrome.tabs.query({}, (tabs) => {
+      const groupIds = new Set();
+      tabs.forEach(tab => {
+        if (tab.groupId && tab.groupId !== -1) groupIds.add(tab.groupId);
+      });
+      const tabCountDiv = document.getElementById('tab-count');
+      tabCountDiv.textContent = `Open Tabs: ${tabs.length} | Tab Groups: ${groupIds.size}`;
+    });
+  }
+  updateTabCount();
+  // Update tab count when popup is opened and after actions
+  [closeDuplicatesButton, ungroupTabsButton, muteTabsButton, unmuteTabsButton, groupByDomainButton, groupByTypeButton].forEach(btn => {
+    btn.addEventListener('click', () => {
+      setTimeout(updateTabCount, 500);
+    });
+  });
+
   // Close Duplicate Tabs
   closeDuplicatesButton.addEventListener('click', () => {
     chrome.tabs.query({}, (tabs) => {

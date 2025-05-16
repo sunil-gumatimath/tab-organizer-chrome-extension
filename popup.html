@@ -6,14 +6,24 @@
 </head>
 <body class="dark-mode">
   <h1>Tab Organizer</h1>
+  <div id="tab-count" style="font-size:0.98em; color:#60A5FA; margin-bottom:12px;"></div>
 
-  <div id="features-section">
-    <button id="mute-tabs">Mute All Tabs</button>
-    <button id="unmute-tabs">Unmute All Tabs</button>
-    <button id="group-by-domain">Group Tabs by Domain</button>
-    <button id="group-by-keyword">Group Tabs by Names</button>
-    <button id="ungroup-tabs">Ungroup All Tabs</button>
-    <button id="close-duplicates">Close Duplicate Tabs</button>
+  <div id="features-section" style="display: flex; flex-direction: column; gap: 18px;">
+    <div>
+      <span style="font-size:0.97em; color:#60A5FA; font-weight:600;">Audio</span>
+      <button id="mute-tabs">Mute All Tabs</button>
+      <button id="unmute-tabs">Unmute All Tabs</button>
+    </div>
+    <div>
+      <span style="font-size:0.97em; color:#34D399; font-weight:600;">Grouping</span>
+      <button id="group-by-domain">Group Tabs by Domain</button>
+      <button id="group-by-keyword">Group Tabs by Names</button>
+      <button id="ungroup-tabs">Ungroup All Tabs</button>
+    </div>
+    <div>
+      <span style="font-size:0.97em; color:#EF4444; font-weight:600;">Cleanup</span>
+      <button id="close-duplicates">Close Duplicate Tabs</button>
+    </div>
   </div>
 
   <div class="settings-section">
