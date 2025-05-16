@@ -10,6 +10,11 @@ let colorIndex = 0;
 chrome.storage.sync.get(['autoGroupingEnabled'], (result) => {
   if (result.hasOwnProperty('autoGroupingEnabled')) {
     isAutoGroupingEnabled = result.autoGroupingEnabled;
+    console.log('Auto-grouping setting loaded:', isAutoGroupingEnabled);
+  } else {
+    // Default to enabled if not set
+    chrome.storage.sync.set({ autoGroupingEnabled: true });
+    console.log('Auto-grouping setting initialized to true');
   }
 });
 
@@ -17,6 +22,7 @@ chrome.storage.sync.get(['autoGroupingEnabled'], (result) => {
 chrome.storage.onChanged.addListener((changes) => {
   if (changes.autoGroupingEnabled) {
     isAutoGroupingEnabled = changes.autoGroupingEnabled.newValue;
+    console.log('Auto-grouping setting changed to:', isAutoGroupingEnabled);
   }
 });
 
@@ -104,20 +110,25 @@ chrome.tabs.onCreated.addListener((tab) => {
 chrome.tabs.onUpdated.addListener((_, changeInfo, tab) => {
   if (!isAutoGroupingEnabled) return;
 
-  // Only process if the URL has changed and is complete
-  if (changeInfo.status === 'complete' && changeInfo.url) {
+  // Process if the tab is complete and has a URL
+  // This catches both new tabs and URL changes
+  if (changeInfo.status === 'complete' && tab.url) {
     autoGroupTab(tab);
   }
 });
 
 // Auto-group a tab based on its domain
 function autoGroupTab(tab) {
+  console.log('Auto-grouping tab:', tab.id, tab.url);
+
   // Skip chrome:// and other special URLs
   if (!tab.url || tab.url.startsWith('chrome://') || tab.url.startsWith('chrome-extension://') || tab.url === 'about:blank') {
+    console.log('Skipping special URL:', tab.url);
     return;
   }
 
   const domain = extractDomain(tab.url);
+  console.log('Extracted domain:', domain);
   if (!domain) return;
 
   const windowId = tab.windowId;
@@ -130,22 +141,52 @@ function autoGroupTab(tab) {
   // If this domain already has a group in this window
   if (domainGroups[windowId][domain]) {
     const groupId = domainGroups[windowId][domain];
+    console.log('Found existing group for domain:', domain, 'Group ID:', groupId);
 
-    // Add the tab to the existing group
-    chrome.tabs.group({ tabIds: [tab.id], groupId: groupId }, () => {
+    // Verify the group still exists
+    chrome.tabGroups.get(groupId, (_) => {
       if (chrome.runtime.lastError) {
-        console.error('Error adding tab to group:', chrome.runtime.lastError.message);
+        console.log('Group no longer exists, creating new group');
+        delete domainGroups[windowId][domain];
+        checkForSameDomainTabs();
+        return;
       }
+
+      // Add the tab to the existing group
+      chrome.tabs.group({ tabIds: [tab.id], groupId: groupId }, () => {
+        if (chrome.runtime.lastError) {
+          console.error('Error adding tab to group:', chrome.runtime.lastError.message);
+          // If there was an error, try creating a new group
+          delete domainGroups[windowId][domain];
+          checkForSameDomainTabs();
+        } else {
+          console.log('Added tab to existing group:', groupId);
+        }
+      });
     });
   } else {
+    checkForSameDomainTabs();
+  }
+
+  // Function to check for tabs with the same domain and create a group if needed
+  function checkForSameDomainTabs() {
     // Check if there are other tabs with the same domain to create a new group
     chrome.tabs.query({ windowId: windowId }, (tabs) => {
+      console.log('Checking all tabs in window for domain:', domain);
       const sameDomainTabs = tabs.filter(t => {
         // Skip the current tab as we already have it
         if (t.id === tab.id) return false;
 
+        // Skip tabs without URLs
+        if (!t.url) return false;
+
         // Check if this tab has the same domain
-        return extractDomain(t.url) === domain;
+        const tabDomain = extractDomain(t.url);
+        const isMatch = tabDomain === domain;
+        if (isMatch) {
+          console.log('Found matching tab:', t.id, t.url);
+        }
+        return isMatch;
       });
 
       // Add the current tab to the list
@@ -153,6 +194,7 @@ function autoGroupTab(tab) {
 
       // Only create a group if there are at least 2 tabs with the same domain
       if (sameDomainTabs.length >= 2) {
+        console.log('Creating group for domain:', domain, 'with tabs:', sameDomainTabs.map(t => t.id));
         const tabIds = sameDomainTabs.map(t => t.id);
 
         // Create a new group
@@ -161,6 +203,8 @@ function autoGroupTab(tab) {
             console.error('Error creating group:', chrome.runtime.lastError.message);
             return;
           }
+
+          console.log('Group created with ID:', groupId);
 
           // Store the group ID for this domain
           domainGroups[windowId][domain] = groupId;
@@ -172,8 +216,16 @@ function autoGroupTab(tab) {
           chrome.tabGroups.update(groupId, {
             title: domain,
             color: color
+          }, () => {
+            if (chrome.runtime.lastError) {
+              console.error('Error updating group:', chrome.runtime.lastError.message);
+            } else {
+              console.log('Group updated with title:', domain, 'and color:', color);
+            }
           });
         });
+      } else {
+        console.log('Not enough tabs for domain:', domain, 'Count:', sameDomainTabs.length);
       }
     });
   }
