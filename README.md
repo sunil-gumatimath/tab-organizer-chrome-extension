@@ -4,6 +4,7 @@ A minimal, modern, and eye-friendly Chrome extension to help you organize your t
 
 ## Features
 
+- **Tab Search and Filter**: Quickly find tabs by searching for text in titles or URLs, with real-time filtering and highlighted matches.
 - **Mute All Tabs**: Mute all tabs in the current window.
 - **Unmute All Tabs**: Unmute all tabs in the current window.
 - **Group Tabs by Domain**: Automatically group tabs by their domain (e.g., all Gmail tabs together).
@@ -29,12 +30,16 @@ A minimal, modern, and eye-friendly Chrome extension to help you organize your t
 
 ## Usage
 - Click the Tab Organizer icon to open the popup.
+- Use the search bar at the top to quickly find and switch to specific tabs.
+- Type any text to filter tabs by title or URL - results update in real-time.
+- Click on a search result to switch to that tab.
 - Use the clearly labeled buttons to manage your tabs.
 - View the current tab and group count at the top.
 - Experience smooth interactions with subtle animations.
 - Enjoy a sleek, modern dark UI that reduces eye strain and enhances focus.
 
 ## Recent Updates
+- **Tab Search Feature (May 2025)**: Added powerful tab search functionality that allows users to quickly find and switch to tabs by searching for text in titles or URLs.
 - **UI Redesign (May 2025)**: Completely revamped the user interface with a modern flat design, consistent button styling, improved spacing, and subtle animations for a more polished user experience.
 
 ## License

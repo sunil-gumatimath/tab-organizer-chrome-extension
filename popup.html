@@ -8,6 +8,15 @@
   <h1>Tab Organizer</h1>
   <div id="tab-count"></div>
 
+  <!-- Tab Search Section -->
+  <div id="search-section">
+    <div class="search-container">
+      <input type="text" id="tab-search" placeholder="Search tabs..." autocomplete="off">
+      <button id="clear-search" aria-label="Clear search">×</button>
+    </div>
+    <div id="search-results"></div>
+  </div>
+
   <div id="features-section">
     <button id="mute-tabs">Mute All Tabs</button>
     <button id="unmute-tabs">Unmute All Tabs</button>
@@ -18,7 +27,7 @@
   </div>
 
   <div class="footer">
-    <div class="app-info">Tab Organizer v1.0</div>
+    <div class="app-info">Tab Organizer v1.1</div>
   </div>
 
   <script src="popup.js"></script>

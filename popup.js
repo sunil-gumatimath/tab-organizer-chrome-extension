@@ -7,6 +7,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const unmuteTabsButton = document.getElementById('unmute-tabs');
   const groupByDomainButton = document.getElementById('group-by-domain');
   const groupByTypeButton = document.getElementById('group-by-keyword'); // Reuse the button for type grouping
+  const tabSearchInput = document.getElementById('tab-search');
+  const clearSearchButton = document.getElementById('clear-search');
+  const searchResultsContainer = document.getElementById('search-results');
   const body = document.body;
 
   // Always enable dark mode
@@ -24,11 +27,134 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
   updateTabCount();
+
   // Update tab count when popup is opened and after actions
   [closeDuplicatesButton, ungroupTabsButton, muteTabsButton, unmuteTabsButton, groupByDomainButton, groupByTypeButton].forEach(btn => {
     btn.addEventListener('click', () => {
       setTimeout(updateTabCount, 500);
     });
+  });
+
+  // Tab Search Functionality
+  let allTabs = [];
+
+  // Get all tabs when popup opens
+  function loadAllTabs() {
+    chrome.tabs.query({}, (tabs) => {
+      allTabs = tabs;
+    });
+  }
+  loadAllTabs();
+
+  // Highlight matching text in search results
+  function highlightMatch(text, query) {
+    if (!query) return text;
+
+    const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+    return text.replace(regex, '<span class="highlight">$1</span>');
+  }
+
+  // Search tabs based on input
+  function searchTabs(query) {
+    if (!query) {
+      searchResultsContainer.style.display = 'none';
+      return;
+    }
+
+    const lowerQuery = query.toLowerCase();
+    const matchingTabs = allTabs.filter(tab => {
+      return tab.title.toLowerCase().includes(lowerQuery) ||
+             tab.url.toLowerCase().includes(lowerQuery);
+    });
+
+    renderSearchResults(matchingTabs, lowerQuery);
+  }
+
+  // Render search results
+  function renderSearchResults(tabs, query) {
+    searchResultsContainer.innerHTML = '';
+
+    if (tabs.length === 0) {
+      searchResultsContainer.innerHTML = '<div class="no-results">No matching tabs found</div>';
+      searchResultsContainer.style.display = 'block';
+      return;
+    }
+
+    tabs.forEach(tab => {
+      const resultItem = document.createElement('div');
+      resultItem.className = 'search-result';
+      resultItem.dataset.tabId = tab.id;
+
+      // Create favicon element
+      const favicon = document.createElement('img');
+      favicon.className = 'favicon';
+      favicon.src = tab.favIconUrl || 'icons/icon16.png';
+      favicon.onerror = () => { favicon.src = 'icons/icon16.png'; };
+
+      // Create title element with highlighted match
+      const title = document.createElement('div');
+      title.className = 'tab-title';
+      title.innerHTML = highlightMatch(tab.title, query);
+
+      // Add elements to result item
+      resultItem.appendChild(favicon);
+      resultItem.appendChild(title);
+
+      // Add click event to switch to tab
+      resultItem.addEventListener('click', () => {
+        chrome.tabs.update(tab.id, { active: true });
+        chrome.windows.update(tab.windowId, { focused: true });
+      });
+
+      searchResultsContainer.appendChild(resultItem);
+    });
+
+    searchResultsContainer.style.display = 'block';
+  }
+
+  // Event listeners for search functionality
+  tabSearchInput.addEventListener('input', (e) => {
+    const query = e.target.value.trim();
+    searchTabs(query);
+
+    // Show/hide clear button based on input
+    if (query.length > 0) {
+      clearSearchButton.style.display = 'flex';
+    } else {
+      clearSearchButton.style.display = 'none';
+    }
+  });
+
+  // Clear search button
+  clearSearchButton.addEventListener('click', () => {
+    tabSearchInput.value = '';
+    searchResultsContainer.style.display = 'none';
+    clearSearchButton.style.display = 'none';
+    tabSearchInput.focus();
+  });
+
+  // Hide clear button initially
+  clearSearchButton.style.display = 'none';
+
+  // Update search results when tabs change
+  chrome.tabs.onUpdated.addListener((_, changeInfo) => {
+    if (changeInfo.status === 'complete') {
+      loadAllTabs();
+      // Re-run search if there's an active query
+      const query = tabSearchInput.value.trim();
+      if (query) {
+        searchTabs(query);
+      }
+    }
+  });
+
+  chrome.tabs.onRemoved.addListener(() => {
+    loadAllTabs();
+    // Re-run search if there's an active query
+    const query = tabSearchInput.value.trim();
+    if (query) {
+      searchTabs(query);
+    }
   });
 
   // Close Duplicate Tabs
