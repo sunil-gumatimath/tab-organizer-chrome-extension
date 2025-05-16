@@ -32,6 +32,10 @@ A minimal, modern, and eye-friendly Chrome extension to help you organize your t
 - Click the Tab Organizer icon to open the popup.
 - Use the search bar at the top to quickly find and switch to specific tabs.
 - Type any text to filter tabs by title or URL - results update in real-time.
+- Use keyboard shortcuts for faster navigation:
+  - Press `Enter` to switch to the first search result
+  - Use `↑` and `↓` arrow keys to navigate through search results
+  - Press `Esc` to clear the search
 - Click on a search result to switch to that tab.
 - Use the clearly labeled buttons to manage your tabs.
 - View the current tab and group count at the top.
@@ -39,6 +43,9 @@ A minimal, modern, and eye-friendly Chrome extension to help you organize your t
 - Enjoy a sleek, modern dark UI that reduces eye strain and enhances focus.
 
 ## Recent Updates
+- **Enhanced Tab Search (May 2025)**: Improved tab search with keyboard navigation, URL display, and better visual feedback.
+- **UI Enhancements (May 2025)**: Added loading indicators, success/error notifications, and improved visual feedback for all actions.
+- **Improved Tab Grouping (May 2025)**: Enhanced domain detection and added more website categories for better tab organization.
 - **Tab Search Feature (May 2025)**: Added powerful tab search functionality that allows users to quickly find and switch to tabs by searching for text in titles or URLs.
 - **UI Redesign (May 2025)**: Completely revamped the user interface with a modern flat design, consistent button styling, improved spacing, and subtle animations for a more polished user experience.
 
