@@ -12,14 +12,6 @@ A minimal, modern, and eye-friendly Chrome extension to help you organize your t
 - **Close Duplicate Tabs**: Close all duplicate tabs (same base URL) in the browser.
 - **Always-on Dark Mode**: Trendy, eye-friendly dark UI with electric blue, neon green, and slate gray accents.
 
-## UI Color Palette
-- **Background:** Charcoal (#18181B)
-- **Primary:** Electric Blue (#60A5FA)
-- **Secondary:** Slate Gray (#374151)
-- **Highlight:** Neon Green (#34D399)
-- **Text:** White (#F9FAFB)
-- **Danger:** Coral Red (#EF4444)
-
 ## Installation
 1. Download or clone this repository.
 2. Open Chrome and go to `chrome://extensions`.
@@ -33,4 +25,4 @@ A minimal, modern, and eye-friendly Chrome extension to help you organize your t
 - Enjoy a sleek, modern dark UI that reduces eye strain.
 
 ## License
-MIT
+Tedz
