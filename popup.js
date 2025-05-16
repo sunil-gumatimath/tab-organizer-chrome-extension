@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const muteTabsButton = document.getElementById('mute-tabs');
   const unmuteTabsButton = document.getElementById('unmute-tabs');
   const groupByDomainButton = document.getElementById('group-by-domain');
-  const groupByTypeButton = document.getElementById('group-by-keyword'); // Reuse the button for type grouping
+  const groupByTypeButton = document.getElementById('group-by-keyword');
   const tabSearchInput = document.getElementById('tab-search');
   const clearSearchButton = document.getElementById('clear-search');
   const searchResultsContainer = document.getElementById('search-results');
@@ -463,7 +463,7 @@ document.addEventListener('DOMContentLoaded', () => {
             domainMap.get(groupName).push(tab.id);
           } catch (e) {
             // Ignore tabs with invalid URLs (e.g., chrome://, about:blank)
-            console.log('Error processing URL:', tab.url, e);
+            // No need to log these errors as they're expected for certain tab types
           }
         });
 
