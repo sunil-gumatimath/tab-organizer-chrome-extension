@@ -142,7 +142,8 @@ function autoGroupTab(tab) {
     // Get all tabs with the same domain
     const sameDomainTabs = tabs.filter(t => {
       if (!t.url) return false;
-      return extractDomain(t.url) === domain;
+      const tabDomain = extractDomain(t.url);
+      return tabDomain && tabDomain === domain;
     });
 
     // Only proceed if there are at least 2 tabs with this domain
@@ -169,7 +170,11 @@ function autoGroupTab(tab) {
     // Function to create a new group
     function createNewGroup() {
       chrome.tabs.group({ tabIds: tabIds }, (groupId) => {
-        if (chrome.runtime.lastError) return;
+        // Check for errors
+        if (chrome.runtime.lastError) {
+          console.error('Error creating group:', chrome.runtime.lastError);
+          return;
+        }
 
         // Store the group ID
         domainGroups[windowId][domain] = groupId;
@@ -181,6 +186,10 @@ function autoGroupTab(tab) {
         chrome.tabGroups.update(groupId, {
           title: domain,
           color: color
+        }, () => {
+          if (chrome.runtime.lastError) {
+            console.error('Error updating group:', chrome.runtime.lastError);
+          }
         });
       });
     }
