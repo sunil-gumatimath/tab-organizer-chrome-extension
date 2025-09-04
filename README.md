@@ -9,7 +9,7 @@ A minimal, modern, and eye-friendly Chrome extension to help you organize your t
 - **Mute All Tabs**: Mute all tabs in the current window.
 - **Unmute All Tabs**: Unmute all tabs in the current window.
 - **Group Tabs by Domain**: Manually group tabs by their domain (e.g., all Gmail tabs together).
-- **Group Tabs by Names**: Group tabs by type (e.g., Social, Work, Shopping, News, Video, Mail, Docs) using smart URL and domain matching.
+- **Group Tabs by Names**: Group tabs by type (e.g., Social, Work, Shopping, News, Video, Mail, Docs, Dev, Travel, Finance) using smart URL and domain matching.
 - **Ungroup All Tabs**: Remove all tabs from any tab groups in the current window.
 - **Close Duplicate Tabs**: Close all duplicate tabs (same base URL) in the browser.
 - **Tab Count Display**: Shows the number of open tabs and tab groups in the popup.
@@ -49,7 +49,14 @@ A minimal, modern, and eye-friendly Chrome extension to help you organize your t
   - Experience smooth interactions with subtle animations
   - Enjoy a sleek, modern dark UI that reduces eye strain and enhances focus
 
+## Technical Details
+- **Manifest Version**: 3 (Chrome Extensions)
+- **Version**: 1.1
+- **Permissions**: tabs, storage, tabGroups
+- **Files**: popup.html, popup.js, popup.css, background.js, manifest.json
+
 ## Recent Updates
+- **Enhanced Grouping Categories (September 2025)**: Added additional grouping categories including Dev, Travel, and Finance for comprehensive tab organization.
 - **Auto Tab Grouping (May 2025)**: Added automatic tab grouping by domain as you browse, with the ability to toggle the feature on/off.
 - **Enhanced Tab Search (May 2025)**: Improved tab search with keyboard navigation, URL display, and better visual feedback.
 - **UI Enhancements (May 2025)**: Added loading indicators, success/error notifications, and improved visual feedback for all actions.
